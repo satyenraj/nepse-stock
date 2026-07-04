@@ -6,15 +6,16 @@ Sources: Sharesansar, Merolagani, Nepsealpha, SharehubNepal
 import requests
 import os
 from bs4 import BeautifulSoup
-from datetime import datetime
+from datetime import datetime, date
 import json
 import csv
+import news_sentiment_analyzer as analyzer
 
 # ─────────────────────────────────────────────
 # CONFIG
 # ─────────────────────────────────────────────
 CSV_FILE = "data/nepal_stock_news.csv"
-CSV_COLUMNS = ["source", "title", "url", "date", "scraped_at", "content"]
+CSV_COLUMNS = ["id", "source", "title", "url", "date", "scraped_at", "content"]
 
 HEADERS = {
     "User-Agent": (
@@ -125,13 +126,18 @@ def scrape_sharesansar(max_articles: int = 10) -> list[dict]:
     results = []
     articles = soup.select("div.featured-news-list")[:max_articles]
 
+    today = date.today()
+    sn = 0
+
     for article in articles:
         title_tag = article.select_one("h4.featured-news-title")
         date_tag = article.select_one("span.text-org")
         link_tag = title_tag.find_parent("a")
-        
+        sn=sn+1
+
         if title_tag:
             results.append({
+                "id": today.strftime('%Y%m%d')+"SS"+("00"+str(sn))[-3:],
                 "source": "Sharesansar",
                 "title": title_tag.get_text(strip=True),
                 "url": link_tag.get("href", ""),
@@ -313,3 +319,5 @@ if __name__ == "__main__":
     else:
         print(f"  ℹ️  No new articles found. CSV is already up to date.")
     print(f"{'='*55}\n")
+
+    analyzer.analyze_n_save(new_articles)
