@@ -1,1 +1,63 @@
 
+name: Nepal Stock News Scraper
+
+on:
+  # Run every day at 10:00 AM Nepal time (NPT = UTC+5:45 → 04:15 UTC)
+  schedule:
+    - cron: "15 4 * * 0-5"    # Sun–Fri 10:00 AM NPT (UTC+5:45 = 04:15 UTC)
+
+  # Allow manual trigger from GitHub UI
+  workflow_dispatch:
+
+# Grant GITHUB_TOKEN the models:read scope — no extra secret needed!
+permissions:
+  contents: write    # to commit CSV files back to repo
+  models: read       # to call GitHub Models API
+
+jobs:
+  scrape-and-analyze:
+    runs-on: ubuntu-latest
+
+    steps:
+      # ── 1. Checkout repo ────────────────────────────────────────
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # ── 2. Set up Python ────────────────────────────────────────
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      # ── 3. Cache pip dependencies ────────────────────────────────
+      - name: Cache pip
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('pyproject.toml') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      # ── 4. Install dependencies ──────────────────────────────────
+      - name: Install dependencies
+        run: pip install .
+
+      # ── 5. Run scraper ───────────────────────────────────────────
+      - name: Scrape latest news
+        run: python nepal_stock_scraper.py
+
+      # ── 6. Run sentiment analysis via GitHub Models ──────────────
+      #    GITHUB_TOKEN is injected automatically — no secret needed!
+      #- name: Analyze sentiment
+      #  env:
+      #    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #  run: python sentiment_scorer.py
+
+      # ── 7. Commit updated CSVs back to repo ─────────────────────
+      - name: Commit updated data
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git diff --staged --quiet || git commit -m "chore: daily news scrape $(date +'%Y-%m-%d')"
+          git add nepal_stock_news.csv nepal_stock_analysis.csv
+          git push

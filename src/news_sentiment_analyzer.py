@@ -21,7 +21,7 @@ from ollama import Client
 # CONFIG
 # ─────────────────────────────────────────────
 INPUT_CSV  = "data/nepal_stock_news.csv"
-OUTPUT_CSV = "data/nepal_stock_impact.csv"
+OUTPUT_CSV = "data/nepal_stock_analysis.csv"
 
 OLLAMA_API_KEY = "11e34a1bb3b74e4b905e4a4b2c484175.83q_wBSMvjzPn7u-y8aNywqF" # os.environ.get("OLLAMA_API_KEY", "")
 MODEL          = "gpt-oss:120b-cloud"   # or "gpt-oss:20b-cloud" for faster/cheaper
