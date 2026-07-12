@@ -44,7 +44,7 @@ jobs:
 
       # ── 5. Run scraper ───────────────────────────────────────────
       - name: Scrape latest news
-        run: python nepal_stock_scraper.py
+        run: python src/nepal_stock_scraper.py
 
       # ── 6. Run sentiment analysis via GitHub Models ──────────────
       #    GITHUB_TOKEN is injected automatically — no secret needed!
@@ -59,5 +59,5 @@ jobs:
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git diff --staged --quiet || git commit -m "chore: daily news scrape $(date +'%Y-%m-%d')"
-          git add nepal_stock_news.csv nepal_stock_analysis.csv
+          git add data/nepal_stock_news.csv data/nepal_stock_analysis.csv
           git push
