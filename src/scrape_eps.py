@@ -14,7 +14,7 @@ HEADERS = {
 }
 
 
-def get_fundamentals(symbol: str, compare_type: str = "yoy") -> pd.DataFrame:
+def get_fundamentals(symbol: str, compare_type: str = "quarterly") -> pd.DataFrame:
     url = f"{BASE_URL}/{symbol}"
 
     response = requests.get(
@@ -62,20 +62,31 @@ if __name__ == "__main__":
 
     symbols = [
         "AKPL",
+        "API",
         "CHCL",
         "CBBL",
         "DDBL",
+        "SKBBL",
         "EBL",
         "GBIME",
         "KBL",
         "MBL",
         "NABIL",
-        "NIL",
         "NMB",
+        "PRVU",
+        "PCBL",
+        "SCB",
+        "NIL",
+        "NLG",
+        "SPIL",
+        "SALICO",
+        "NMB",
+        "MEN",
         "SAHAS",
         "SANIMA",
         "SBL",
         "SHPC",
+        "GBBL",
     ]
 
     frames = []
