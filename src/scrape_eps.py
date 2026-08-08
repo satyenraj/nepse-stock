@@ -67,6 +67,9 @@ if __name__ == "__main__":
         "CBBL",
         "DDBL",
         "SKBBL",
+        "MLBSL",
+        "SWBBL",
+        "SLBBL",
         "EBL",
         "GBIME",
         "KBL",
@@ -87,6 +90,11 @@ if __name__ == "__main__":
         "SBL",
         "SHPC",
         "GBBL",
+        "JBBL",
+        "SHINE",
+        "KSBBL",
+        "MNBBL",
+        "NTC",
     ]
 
     frames = []
