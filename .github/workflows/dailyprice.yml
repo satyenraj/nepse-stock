@@ -1,0 +1,45 @@
+name: Nepal Stock daily price scrapper
+
+on:
+  schedule:
+    - cron: "15 12 * * 0-5"    # Sun–Fri 6:00 PM NPT (UTC+5:45 → 12:15 UTC)
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  models: read
+
+jobs:
+  scrape-and-analyze:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12.x"
+
+      - name: Cache pip
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('pyproject.toml') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: Install dependencies
+        run: pip install .
+
+      - name: Scrape daily stock price
+        run: python src/dailyDataScraper.py
+
+      - name: Commit updated daily stock price data
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/company
+          git diff --staged --quiet || git commit -m "chore: daily price scrape $(date +'%Y-%m-%d')"
+          git push
