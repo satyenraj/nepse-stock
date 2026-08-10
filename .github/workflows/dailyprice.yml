@@ -36,6 +36,9 @@ jobs:
       - name: Scrape daily stock price
         run: python src/dailyDataScraper.py
 
+      - name: Scrape daily company fundamental data
+        run: python src/fundamental_scraper.py
+
       - name: Commit updated daily stock price data
         run: |
           git config user.name  "github-actions[bot]"

@@ -1,5 +1,6 @@
 import requests
 import pandas as pd
+from constants.companyIdMap import companyIdMap
 
 BASE_URL = "https://sharehubnepal.com/data/api/v1/fundamental/values"
 
@@ -60,42 +61,7 @@ def get_fundamentals(symbol: str, compare_type: str = "quarterly") -> pd.DataFra
 
 if __name__ == "__main__":
 
-    symbols = [
-        "AKPL",
-        "API",
-        "CHCL",
-        "CBBL",
-        "DDBL",
-        "SKBBL",
-        "MLBSL",
-        "SWBBL",
-        "SLBBL",
-        "EBL",
-        "GBIME",
-        "KBL",
-        "MBL",
-        "NABIL",
-        "NMB",
-        "PRVU",
-        "PCBL",
-        "SCB",
-        "NIL",
-        "NLG",
-        "SPIL",
-        "SALICO",
-        "NMB",
-        "MEN",
-        "SAHAS",
-        "SANIMA",
-        "SBL",
-        "SHPC",
-        "GBBL",
-        "JBBL",
-        "SHINE",
-        "KSBBL",
-        "MNBBL",
-        "NTC",
-    ]
+    symbols = list(companyIdMap.keys())
 
     frames = []
 
