@@ -20,6 +20,24 @@ tables = pd.read_html(StringIO(html))
 # select the first table i.e. the stock price table
 dataTable = tables[0]
 
+# Select and rename columns
+selected_columns = {
+    "Symbol": "symbol",
+    "Open": "open",
+    "High": "high",
+    "Low": "low",
+    "Close": "close",
+    "Diff %": "change_percent",
+    "Vol": "volume",
+    "Turnover": "traded_amount"
+}
+
+dataTable = dataTable[list(selected_columns.keys())].rename(columns=selected_columns)
+
+# Write selected columns to CSV
+dataTable.to_csv("data/today_prices.csv", mode="w", index=False)
+
+
 fileDir = Path(__file__).parent.parent / "data" / "company"
 for file in fileDir.glob("*.csv"):
     # first check if data already exist for this date
