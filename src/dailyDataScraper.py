@@ -29,13 +29,17 @@ selected_columns = {
     "Close": "close",
     "Diff %": "change_percent",
     "Vol": "volume",
-    "Turnover": "traded_amount"
+    "Turnover": "traded_amount",
+    "52 Weeks High": "52_weeks_high",
+    "52 Weeks Low": "52_weeks_low",
+    "120 Days": "120_days",
+    "180 Days": "180_days",
 }
 
-dataTable = dataTable[list(selected_columns.keys())].rename(columns=selected_columns)
+dataTodayPrice = dataTable[list(selected_columns.keys())].rename(columns=selected_columns)
 
 # Write selected columns to CSV
-dataTable.to_csv("data/today_prices.csv", mode="w", index=False)
+dataTodayPrice.to_csv("data/today_prices.csv", mode="w", index=False)
 
 
 fileDir = Path(__file__).parent.parent / "data" / "company"
